@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """
-FIFOCache module
+LIFOCache module
 """
 
 from typing import Any
 from base_caching import BaseCaching
 
 
-class FIFOCache(BaseCaching):
+class LIFOCache(BaseCaching):
     """
-    FIFOCache class
+    LIFOCache class
     """
 
     def __init__(self):
-        """ Initialize FIFOCache """
+        """ Initialize LIFOCache """
         super().__init__()
-        self.queue = []
+        self.stack = []
 
     def put(self, key: Any, item: Any) -> None:
         """ Add an item to the cache """
@@ -23,13 +23,12 @@ class FIFOCache(BaseCaching):
             return
 
         if len(self.cache_data) >= self.MAX_ITEMS:
-            first_key = self.queue[0]
-            self.queue = self.queue[1:]
-            del self.cache_data[first_key]
-            print("DISCARD:", first_key)
+            last_key = self.stack.pop()
+            del self.cache_data[last_key]
+            print("DISCARD:", last_key)
 
         self.cache_data[key] = item
-        self.queue.append(key)
+        self.stack.append(key)
 
     def get(self, key: Any) -> Any:
         """ Retrieve an item from the cache """
